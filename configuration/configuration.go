@@ -37,7 +37,7 @@ func LoadConfig() (*Configuration, error) {
 
 	viper.SetConfigName("base")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath(config_dir)
+	viper.AddConfigPath(config_dir + "/configuration")
 	err := viper.ReadInConfig()
 	if err != nil {
 		return nil, fmt.Errorf("fatal error reading config file: %w", err)
@@ -48,7 +48,7 @@ func LoadConfig() (*Configuration, error) {
 		fmt.Println("Loading " + config_dir + "/production.yaml")
 		viper.SetConfigName("production")
 		viper.SetConfigType("yaml")
-		viper.AddConfigPath(config_dir)
+		viper.AddConfigPath(fmt.Sprintf("%s/configuration", config_dir))
 
 		err := viper.MergeInConfig()
 		if err != nil {
@@ -75,10 +75,10 @@ func LoadConfig() (*Configuration, error) {
 	return cfg, err
 }
 
-func (d *Database) conn_str() string {
+func (d *Database) Conn_str() string {
 	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s", d.Uname, d.Password, d.Host, d.Port, d.Database_name)
 }
 
-func (d *Database) default_conn_str() string {
+func (d *Database) Default_conn_str() string {
 	return fmt.Sprintf("postgres://%s:%s@%s:%s/postgres", d.Uname, d.Password, d.Host, d.Port)
 }
